@@ -1,30 +1,33 @@
 <script setup lang="ts">
-import { reactive } from 'vue' // 引入reactive函数
-import {resumeStore} from '@/stores/index'
-const Test = resumeStore()
-// defineProps<{
-//   msg: string
-// }>()
-let data =  reactive({
-  isShow:false,
-  tabList:[
-    {value:1,label:'基本\n信息',icon:'icon-shetuanhuodong'},
-    {value:2,label:'求职\n岗位',icon:'icon-yingpinzhiwei'},
-    {value:3,label:'教育\n背景',icon:'icon-xueli'},
-    {value:4,label:'工作\n经验',icon:'icon-gongzuojingyan'},
-    {value:5,label:'项目\n经验',icon:'icon-shixijingli'},
-    {value:6,label:'技能\n特长',icon:'icon-zuopinzhanshi'},
-    {value:7,label:'自我\n评价',icon:'icon-ziwopingjia'}
-  ],
-  currentTab:1
-})
-const changeShowFn = () =>{
-  data.isShow = !data.isShow
-}
+  import { reactive } from 'vue' // 引入reactive函数
+  import {resumeStore} from '@/stores/index'
+  import {basicConfig} from './config/config'
+  import pageForm from '@/components/page-form'
 
-const change =()=>{
-  Test.setCurrent()
-}
+  const Test = resumeStore()
+  // defineProps<{
+  //   msg: string
+  // }>()
+  let data =  reactive({
+    isShow:false,
+    tabList:[
+      {value:1,label:'基本信息',icon:'icon-shetuanhuodong'},
+      {value:2,label:'求职岗位',icon:'icon-yingpinzhiwei'},
+      {value:3,label:'教育背景',icon:'icon-xueli'},
+      {value:4,label:'工作经验',icon:'icon-gongzuojingyan'},
+      {value:5,label:'项目经验',icon:'icon-shixijingli'},
+      {value:6,label:'技能特长',icon:'icon-zuopinzhanshi'},
+      {value:7,label:'自我评价',icon:'icon-ziwopingjia'}
+    ],
+    currentTab:1
+  })
+  const changeShowFn = () =>{
+    data.isShow = !data.isShow
+  }
+
+  const change =()=>{
+    Test.setCurrent()
+  }
 </script>
 
 <template>
@@ -52,7 +55,9 @@ const change =()=>{
               <b>{{ item.label }}</b>
             </li>
           </ul>
-          <div class="edit_b"></div>
+          <div class="edit_b">
+            <pageForm :formConfig="basicConfig"></pageForm>
+          </div>
         </div>
       </div>
     </div>
@@ -65,7 +70,7 @@ const change =()=>{
   right:0;
   top:0;
   height: 100%;
-  width:450px;
+  width:500px;
   box-shadow: 0 0 20px rgb(0 0 0 / 20%);
   transition: all .3s ease-out 0s;
   transform: translateX(calc(100% - 55px));
@@ -79,7 +84,7 @@ const change =()=>{
     border-radius: 50%;
     position: fixed;
     top:50%;
-    right:445px;
+    right:495px;
     z-index: 1;
     margin-top: -40px;
     cursor: pointer;
@@ -88,7 +93,7 @@ const change =()=>{
     transform: translateX(calc(100% - 55px));
     -webkit-transform: translateX(calc(100% - 55px));
     &:hover{
-      right:450px;
+      right:500px;
     }
   }
   &.edit_show{
@@ -142,6 +147,7 @@ const change =()=>{
     b{
       margin-left:10px;
       white-space: pre-line;
+      width:33px;
     }
   }
 }

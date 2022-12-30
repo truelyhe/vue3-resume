@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {resumeStore} from '@/stores/index'
+import {columns} from './config'
 const Test = resumeStore()
 
 </script>
@@ -13,7 +14,19 @@ const Test = resumeStore()
           <div class="resume_l_box"></div>
         </div>
         <div class="resume_r">
-          {{ Test.name }}--{{ Test.current }}
+          <div v-for="item in columns" class="module_box">
+            <div class="title">{{ item.label }}</div>
+            <div class="content">
+              <template v-if="item.data instanceof Array">
+                <template v-for="(child,j) in item.data">
+                  <span>{{ child.companyName }}</span>
+                </template>        
+              </template>
+              <template v-else-if="item.data instanceof Object">
+                <span>{{ item.data.name }}</span>
+              </template>
+            </div>
+          </div>
         </div>
       </div>
     </div>
