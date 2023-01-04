@@ -1,10 +1,12 @@
 <script setup lang="ts">
   import { reactive } from 'vue' // 引入reactive函数
-  import {resumeStore} from '@/stores/index'
+  import {baseInfoStore} from '@/stores/baseInfo'
   import {basicConfig} from './config/config'
+  import { updateData } from '@/api/baseInfo.js'
   import pageForm from '@/components/page-form'
-
-  const Test = resumeStore()
+  import { ElMessage } from 'element-plus';
+  const myId = '63b513aa94e29cc2f246d4d2'
+  const baseInfo = baseInfoStore()
   // defineProps<{
   //   msg: string
   // }>()
@@ -25,8 +27,18 @@
     data.isShow = !data.isShow
   }
 
-  const change =()=>{
-    Test.setCurrent()
+  // const change =()=>{
+  //   baseInfo.setCurrent()
+  // }
+
+  const handleQueryClick = (data) =>{
+    updateData(myId,data).then((res:any)=>{
+      if(res.code==200){
+        ElMessage.success(res.msg)
+        baseInfo.getBaseInfo()
+      }
+      console.log(res,'22222')
+    })
   }
 </script>
 
@@ -56,7 +68,7 @@
             </li>
           </ul>
           <div class="edit_b">
-            <pageForm :formConfig="basicConfig"></pageForm>
+            <pageForm :formConfig="basicConfig" @handleQueryClick="handleQueryClick"></pageForm>
           </div>
         </div>
       </div>

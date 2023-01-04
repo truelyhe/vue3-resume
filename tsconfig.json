@@ -5,7 +5,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["element-plus/global","node"],
+    "strict":false
   },
 
   "references": [

@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import {resumeStore} from '@/stores/index'
-import {columns} from './config'
-const Test = resumeStore()
+  import {baseInfoStore} from '@/stores/baseInfo'
+  import {columns} from './config'
+  import { onMounted,reactive,computed } from 'vue';
+  const BaseInfo = baseInfoStore()
+  const cloneColumns = reactive(JSON.parse(JSON.stringify(columns)))
+  
+  onMounted(async()=>{
+    await BaseInfo.getBaseInfo()
+  })
+  cloneColumns[0].data = computed(() => {
+    return BaseInfo.data
+  })
 
 </script>
 
@@ -14,16 +23,17 @@ const Test = resumeStore()
           <div class="resume_l_box"></div>
         </div>
         <div class="resume_r">
-          <div v-for="item in columns" class="module_box">
+          <div v-for="item in cloneColumns" class="module_box">
             <div class="title">{{ item.label }}</div>
             <div class="content">
               <template v-if="item.data instanceof Array">
                 <template v-for="(child,j) in item.data">
-                  <span>{{ child.companyName }}</span>
+                  <span>{{ item.key }}</span>
                 </template>        
               </template>
               <template v-else-if="item.data instanceof Object">
-                <span>{{ item.data.name }}</span>
+                <span>姓名：{{ item.data.name }}</span>
+                <span>姓别：{{ item.data.sex==1?'男':'女' }}</span>
               </template>
             </div>
           </div>
@@ -71,5 +81,15 @@ const Test = resumeStore()
 .resume_r{
   flex:1;
   padding:20px;
+  .title{
+    font-weight: bold;
+  }
+  .content{
+    margin:10px 0;
+    font-size: 14px;
+    span{
+      margin-right:20px;
+    }
+  }
 }
 </style>

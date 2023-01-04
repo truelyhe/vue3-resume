@@ -12,7 +12,7 @@ export interface IFormItem {
   type: IFormType;
   label: string;
   rules?: any[];
-  placeholder?: string | number;
+  placeholder?: string;
   options?: any[];
 }
 

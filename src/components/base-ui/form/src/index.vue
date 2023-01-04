@@ -121,7 +121,7 @@ watch(
 
 <style scoped lang="scss">
 .el-select,
-::v-deep.el-cascader {
+:deep(.el-cascader) {
   width: 100%;
 }
 .el-row{
