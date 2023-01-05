@@ -1,14 +1,14 @@
 <template>
-  <div class="page-search">
+  <div class="page-form">
     <hForm v-bind="props.formConfig" v-model="formData">
-      <template #footer>
+      <template #footer="{ formRef }">
         <div class="search-btn">
           <el-button
             type="default"
             @click="handleResetClick"
             >重置</el-button
           >
-          <el-button type="primary" @click="handleQueryClick"
+          <el-button type="primary" @click="handleSubmit(formRef)"
             >保存</el-button
           >
         </div>
@@ -21,7 +21,9 @@
 import hForm from '@/components/base-ui/form';
 // import { Search, RefreshLeft } from '@element-plus/icons-vue';
 import { ref, defineProps, defineExpose, defineEmits } from 'vue';
-const emits = defineEmits(['handleQueryClick', 'handleResetClick']);
+import type { FormInstance } from 'element-plus'
+
+const emits = defineEmits(['handleSubmit', 'handleResetClick']);
 const props = defineProps({
   formConfig: {
     type: Object,
@@ -49,13 +51,21 @@ const handleResetClick = () => {
   }
   emits('handleResetClick');
 };
-const handleQueryClick = () => {
-  emits('handleQueryClick', formData.value);
+
+const handleSubmit = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      emits('handleSubmit', formData.value)
+    } else {
+      return false
+    }
+  })
 };
 
 // 暴露方法
 defineExpose({
-  handleQueryClick,
+  handleSubmit,
   handleResetClick
 });
 </script>

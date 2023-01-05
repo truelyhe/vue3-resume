@@ -1,6 +1,5 @@
 import request from './request'
 
-// 获取验证码
 export function getData(params) {
   return request({
     url: '/baseInfo/data',

@@ -1,41 +1,48 @@
 <script setup lang="ts">
   import { reactive } from 'vue' // 引入reactive函数
-  import {baseInfoStore} from '@/stores/baseInfo'
-  import {basicConfig} from './config/config'
+  import {resumeInfoStore} from '@/stores/resume'
+  import {basicConfig,jobConfig} from './config/config'
   import { updateData } from '@/api/baseInfo.js'
+  import { updateJobData,addJobData } from '@/api/job.js'
   import pageForm from '@/components/page-form'
   import { ElMessage } from 'element-plus';
   const myId = '63b513aa94e29cc2f246d4d2'
-  const baseInfo = baseInfoStore()
+  const ResumeStore = resumeInfoStore()
   // defineProps<{
   //   msg: string
   // }>()
   let data =  reactive({
     isShow:false,
     tabList:[
-      {value:1,label:'基本信息',icon:'icon-shetuanhuodong'},
-      {value:2,label:'求职岗位',icon:'icon-yingpinzhiwei'},
+      {value:1,label:'基本信息',icon:'icon-shetuanhuodong',api:updateData},
+      {value:2,label:'求职岗位',icon:'icon-yingpinzhiwei',api:updateJobData},
       {value:3,label:'教育背景',icon:'icon-xueli'},
       {value:4,label:'工作经验',icon:'icon-gongzuojingyan'},
       {value:5,label:'项目经验',icon:'icon-shixijingli'},
       {value:6,label:'技能特长',icon:'icon-zuopinzhanshi'},
       {value:7,label:'自我评价',icon:'icon-ziwopingjia'}
     ],
-    currentTab:1
+    currentTab:1,
+    formConfig:'basicConfig'
   })
   const changeShowFn = () =>{
     data.isShow = !data.isShow
   }
 
-  // const change =()=>{
-  //   baseInfo.setCurrent()
-  // }
+  const clickTabFn = (item) =>{
+    data.currentTab = item.value
+  }
 
-  const handleQueryClick = (data) =>{
-    updateData(myId,data).then((res:any)=>{
+  const handleSubmit = (datas) =>{
+    
+    const currentApi = data.tabList.find(e=>e.value==data.currentTab).api
+    console.log(currentApi,'data.currentApi')
+    //addJobData({...datas,resumeId:myId}).then((res:any)=>{})
+    currentApi(myId,datas).then((res:any)=>{
       if(res.code==200){
         ElMessage.success(res.msg)
-        baseInfo.getBaseInfo()
+        ResumeStore.getBaseInfo()
+        ResumeStore.getJobInfo()
       }
       console.log(res,'22222')
     })
@@ -51,7 +58,7 @@
       <div class="edit_content_all">
         <div class="edit_l">
           <ul class="edit_tab">
-            <li :class="{active:data.currentTab === item.value}" v-for="item in data.tabList" @click="data.currentTab = item.value">
+            <li :class="{active:data.currentTab === item.value}" v-for="item in data.tabList" @click="clickTabFn(item)">
               <el-popover
                 placement="left"
                 :width="100"
@@ -68,7 +75,7 @@
             </li>
           </ul>
           <div class="edit_b">
-            <pageForm :formConfig="basicConfig" @handleQueryClick="handleQueryClick"></pageForm>
+            <pageForm :formConfig="data.currentTab==2?jobConfig:basicConfig" @handleSubmit="handleSubmit"></pageForm>
           </div>
         </div>
       </div>
@@ -162,5 +169,8 @@
       width:33px;
     }
   }
+}
+.edit_b{
+  flex:1
 }
 </style>

@@ -1,16 +1,21 @@
 <script setup lang="ts">
-  import {baseInfoStore} from '@/stores/baseInfo'
+  import {resumeInfoStore} from '@/stores/resume'
   import {columns} from './config'
   import { onMounted,reactive,computed } from 'vue';
-  const BaseInfo = baseInfoStore()
+  const ResumeStore = resumeInfoStore()
   const cloneColumns = reactive(JSON.parse(JSON.stringify(columns)))
   
   onMounted(async()=>{
-    await BaseInfo.getBaseInfo()
+    await ResumeStore.getBaseInfo()
+    await ResumeStore.getJobInfo()
   })
   cloneColumns[0].data = computed(() => {
-    return BaseInfo.data
+    return ResumeStore.resumeInfo.baseInfo
   })
+  cloneColumns[1].data = computed(() => {
+    return ResumeStore.resumeInfo.jobInfo
+  })
+
 
 </script>
 
@@ -32,8 +37,13 @@
                 </template>        
               </template>
               <template v-else-if="item.data instanceof Object">
-                <span>姓名：{{ item.data.name }}</span>
-                <span>姓别：{{ item.data.sex==1?'男':'女' }}</span>
+                <div class="con_box" v-if="item.key === 'baseInfo'">
+                  <span>姓名：{{ item.data.name }}</span>
+                  <span>姓别：{{ item.data.sex==1?'男':'女' }}</span>
+                </div>
+                <div class="con_box" v-else>
+                  <span>职位：{{ item.data.jobName }}</span>
+                </div>
               </template>
             </div>
           </div>

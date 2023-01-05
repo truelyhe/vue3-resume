@@ -6,17 +6,32 @@ export const basicConfig: IForm = {
       field: 'sex',
       type: 'select',
       label: '性别',
-      placeholder: '请选择性别',
+      placeholder: '请选择',
       options: [
-        { label: '男', value: '1' },
-        { label: '女', value: '2' },
+        { label: '男', value: '1',type:'option' },
+        { label: '女', value: '2',type:'option' },
       ]
     },
     {
       field: 'name',
       type: 'input',
       label: '姓名',
-      placeholder: '请输入姓名'
+      placeholder: '请输入',
+      rules:[{ required: true, message: '请输入', trigger: 'blur' }]
+    },
+    {
+      field:'birth',
+      type: 'date-picker',
+      label: '生日',
+      placeholder: '请选择',
+      attrs:{
+        type:'date'
+      }
+    },{
+      field: 'phone',
+      type: 'input',
+      label: '电话',
+      placeholder: '请输入'
     },
     // {
     //   field: 'password',
@@ -104,3 +119,15 @@ export const basicConfig: IForm = {
     // }
   ]
 };
+
+export const jobConfig: IForm = {
+  formItems: [
+    {
+      field: 'jobName',
+      type: 'input',
+      label: '职位',
+      placeholder: '请输入',
+      rules:[{ required: true, message: '请输入', trigger: 'blur' }]
+    },
+  ]
+}
