@@ -36,15 +36,12 @@
   const handleSubmit = (datas) =>{
     
     const currentApi = data.tabList.find(e=>e.value==data.currentTab).api
-    console.log(currentApi,'data.currentApi')
     //addJobData({...datas,resumeId:myId}).then((res:any)=>{})
     currentApi(myId,datas).then((res:any)=>{
       if(res.code==200){
         ElMessage.success(res.msg)
-        ResumeStore.getBaseInfo()
-        ResumeStore.getJobInfo()
+        ResumeStore.getAllInfo()
       }
-      console.log(res,'22222')
     })
   }
 </script>

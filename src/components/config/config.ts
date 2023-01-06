@@ -3,6 +3,26 @@ import type { IForm } from '@/components/base-ui/form/types';
 export const basicConfig: IForm = {
   formItems: [
     {
+      field: 'avatar',
+      type: 'upload',
+      label: '头像',
+      uploadAttrs:{
+        action:'/prod-api/file/upload',
+        'show-file-list':false,
+      },
+      attrs:{
+        class:'avatar-uploader'
+      },
+      placeholder: '请上传'
+    },
+    {
+      field: 'name',
+      type: 'input',
+      label: '姓名',
+      placeholder: '请输入',
+      rules:[{ required: true, message: '请输入', trigger: 'blur' }]
+    },
+    {
       field: 'sex',
       type: 'select',
       label: '性别',
@@ -11,13 +31,6 @@ export const basicConfig: IForm = {
         { label: '男', value: '1',type:'option' },
         { label: '女', value: '2',type:'option' },
       ]
-    },
-    {
-      field: 'name',
-      type: 'input',
-      label: '姓名',
-      placeholder: '请输入',
-      rules:[{ required: true, message: '请输入', trigger: 'blur' }]
     },
     {
       field:'birth',

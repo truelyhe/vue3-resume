@@ -9,7 +9,7 @@ export const columns = Object.freeze([
       phone:'18919191919'
     }
   },{
-    key:'job',
+    key:'jobInfo',
     label:'求职岗位',
     data:{
       jobName:'讲师',
@@ -18,7 +18,7 @@ export const columns = Object.freeze([
       time:1
     }
   },{
-    key:'work',
+    key:'workInfo',
     label:'工作经验',
     data:[{
       companyName:'字节跳动',

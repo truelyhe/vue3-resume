@@ -8,6 +8,7 @@ type IFormType =
   | 'radio'
   | 'radio-group'
   | 'option'
+  | 'upload'
   | 'date-picker';
 
 export interface IFormItem {
@@ -24,7 +25,18 @@ export interface IFormItem {
     showPassword?: boolean,
     disabled?: boolean,
     type?: string,
+    class?: string,
   },
+  uploadAttrs?: {
+    action: string,
+    header?: string,
+    multiple?: boolean,
+    accept?:string,
+    listType?: 'text' | 'picture' | 'picture-card',
+    autoUpload?: boolean,
+    limit?:number,
+    'show-file-list'?: boolean,
+  }
 }
 
 export interface IForm {

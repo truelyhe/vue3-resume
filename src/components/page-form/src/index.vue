@@ -1,6 +1,9 @@
 <template>
   <div class="page-form">
     <hForm v-bind="props.formConfig" v-model="formData">
+      <template #uploadArea>
+        <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
+      </template>
       <template #footer="{ formRef }">
         <div class="search-btn">
           <el-button
@@ -22,6 +25,7 @@ import hForm from '@/components/base-ui/form';
 // import { Search, RefreshLeft } from '@element-plus/icons-vue';
 import { ref, defineProps, defineExpose, defineEmits } from 'vue';
 import type { FormInstance } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 
 const emits = defineEmits(['handleSubmit', 'handleResetClick']);
 const props = defineProps({

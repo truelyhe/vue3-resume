@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getData } from '@/api/baseInfo'
+import { getData,getAllData } from '@/api/baseInfo'
 import { getJobData } from '@/api/job'
 const myId = '63b513aa94e29cc2f246d4d2'
 
@@ -7,6 +7,7 @@ export const resumeInfoStore = defineStore('baseInfo', {
   state:()=>{
     return{
       resumeInfo:{
+        allInfo:{},
         baseInfo:{},
         jobInfo:{}
       }
@@ -18,6 +19,12 @@ export const resumeInfoStore = defineStore('baseInfo', {
   },
   //methods,同步or异步，提交state
   actions:{
+    async getAllInfo() {
+      await getAllData({id:myId}).then((res:any)=>{
+        this.resumeInfo.allInfo = res.data
+        this.resumeInfo.baseInfo = res.data
+      })
+    },
     async getBaseInfo() {
       await getData({id:myId}).then((res:any)=>{
         this.resumeInfo.baseInfo = res.data[0]

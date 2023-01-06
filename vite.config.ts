@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
 process.env.VUE_APP_BASE_API = '/prod-api'
+let target = 'http://localhost:8888'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,7 +17,8 @@ export default defineConfig({
   },
   define: {
     'process.env': {
-      VUE_APP_BASE_API:process.env.VUE_APP_BASE_API
+      VUE_APP_BASE_API:process.env.VUE_APP_BASE_API,
+      fileBaseUrl: process.env.VUE_APP_BASE_API + '/file/getImage/'
     }
   },
 
@@ -36,7 +38,7 @@ export default defineConfig({
     open: true,
     proxy: {
       [process.env.VUE_APP_BASE_API]:{
-        target:'http://localhost:8888',//'https://ssodev.tongxincaijin.cn',
+        target,
         changeOrigin:true,
         rewrite:(path)=>path.replace(/^\/prod-api/,'')
       }

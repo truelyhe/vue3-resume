@@ -15,3 +15,19 @@ export function updateData(id,data) {
     data
   })
 }
+
+export function getAllData(params) {
+  return request({
+    url: '/baseInfo/allData',
+    method: 'get',
+    params
+  })
+}
+
+export function uploadData(params) {
+  return request({
+    url: '/baseInfo/upload',
+    method: 'post',
+    params
+  })
+}

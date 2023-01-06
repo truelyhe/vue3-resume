@@ -7,6 +7,7 @@
       <template v-for="item in props.formItems" :key="item.label">
         <el-form-item :label="item.label" :prop="item.field" :rules="item.rules">
           <component
+            v-if="item.type !== 'upload'"
             :is="`el-${item.type}`"
             :placeholder="item.placeholder"
             v-bind="item.attrs"
@@ -22,6 +23,14 @@
               ></component>
             </template>
           </component>
+          <el-upload
+            v-else
+              v-bind="{...item.attrs,...item.uploadAttrs}"
+              :on-success="(res,file)=>uploadSuccess(res,file,item.field)">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+              <slot name="uploadArea"></slot>
+              <slot name="uploadTip"></slot>
+          </el-upload>
         </el-form-item>
       </template>
     </el-form>
@@ -34,7 +43,8 @@
 <script setup lang="ts">
 import type { IFormItem } from '../types';
 import { defineProps, defineEmits, ref, watch } from 'vue';
-import type { FormInstance } from 'element-plus'
+import type { FormInstance,UploadProps } from 'element-plus'
+
 const emits = defineEmits(['update:modelValue']);
 const formRef = ref<FormInstance>()
 const props = defineProps({
@@ -64,8 +74,15 @@ const formData = ref({ ...props.modelValue });
 //   }
 // );
 
-const submitForm = async () => {
-  
+const imageUrl = ref('')
+
+const uploadSuccess = (
+  response,
+  uploadFile,
+  field
+) => {
+  imageUrl.value = process.env.fileBaseUrl+response.data//URL.createObjectURL(uploadFile.raw!)
+  formData.value[field!] = imageUrl.value
 }
 
 // 进行深度监听
@@ -79,9 +96,9 @@ watch(
   }
 );
 
-defineExpose({
-  submitForm
-})
+// defineExpose({
+//   submitForm
+// })
 </script>
 
 <style scoped lang="scss">
@@ -94,5 +111,31 @@ defineExpose({
 }
 .my-form{
   padding:20px 25px 20px 0;
+}
+
+:deep(.avatar-uploader){
+  .avatar {
+    width: 118px;
+    height: 118px;
+    display: block;
+  }
+  .el-upload {
+    border: 1px dashed var(--el-border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+  } 
+  .el-upload:hover {
+    border-color: var(--el-color-primary);
+  }
+  .el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 118px;
+    height: 118px;
+    text-align: center;
+  }
 }
 </style>
