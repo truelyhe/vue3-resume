@@ -9,7 +9,8 @@ type IFormType =
   | 'radio-group'
   | 'option'
   | 'upload'
-  | 'date-picker';
+  | 'date-picker'
+  | 'editor';
 
 export interface IFormItem {
   field: string;

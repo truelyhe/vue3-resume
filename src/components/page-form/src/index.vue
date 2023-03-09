@@ -23,16 +23,21 @@
 <script setup lang="ts">
 import hForm from '@/components/base-ui/form';
 // import { Search, RefreshLeft } from '@element-plus/icons-vue';
-import { ref, defineProps, defineExpose, defineEmits } from 'vue';
+import { ref, defineProps, defineExpose, defineEmits,watch,inject  } from 'vue';
 import type { FormInstance } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 
+const bakFormData = inject('bakFormData')
 const emits = defineEmits(['handleSubmit', 'handleResetClick']);
 const props = defineProps({
   formConfig: {
     type: Object,
     required: true
-  }
+  },
+  bakFormData: {
+    type: Object,
+    default:null
+  },
 });
 const formItems = props.formConfig.formItems ?? [];
 const formOriginData: any = {};
@@ -55,6 +60,10 @@ const handleResetClick = () => {
   }
   emits('handleResetClick');
 };
+
+watch(()=>props.bakFormData, (newValue, oldValue) => {
+  if(newValue){formData.value = newValue}
+}, { deep: true })
 
 const handleSubmit = (formEl: FormInstance | undefined) => {
   if (!formEl) return

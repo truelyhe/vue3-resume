@@ -14,8 +14,8 @@
   let data =  reactive({
     isShow:false,
     tabList:[
-      {value:1,label:'基本信息',icon:'icon-shetuanhuodong',api:updateData},
-      {value:2,label:'求职岗位',icon:'icon-yingpinzhiwei',api:updateJobData},
+      {value:1,label:'基本信息',icon:'icon-shetuanhuodong',api:updateData,dataKey:'baseInfo'},
+      {value:2,label:'求职岗位',icon:'icon-yingpinzhiwei',api:updateJobData,dataKey:'jobInfo'},
       {value:3,label:'教育背景',icon:'icon-xueli'},
       {value:4,label:'工作经验',icon:'icon-gongzuojingyan'},
       {value:5,label:'项目经验',icon:'icon-shixijingli'},
@@ -23,20 +23,24 @@
       {value:7,label:'自我评价',icon:'icon-ziwopingjia'}
     ],
     currentTab:1,
-    formConfig:'basicConfig'
+    formConfig:'basicConfig',
+    formData:null
   })
   const changeShowFn = () =>{
     data.isShow = !data.isShow
+    clickTabFn(data.currentTab)
   }
 
-  const clickTabFn = (item) =>{
-    data.currentTab = item.value
+  const clickTabFn = (value) =>{
+    data.currentTab = value
+    const dataKey = data.tabList.find(e=>e.value==data.currentTab).dataKey
+    data.formData = ResumeStore.resumeInfo[dataKey][0]
   }
 
   const handleSubmit = (datas) =>{
-    
     const currentApi = data.tabList.find(e=>e.value==data.currentTab).api
     //addJobData({...datas,resumeId:myId}).then((res:any)=>{})
+    datas._id?delete datas._id:''
     currentApi(myId,datas).then((res:any)=>{
       if(res.code==200){
         ElMessage.success(res.msg)
@@ -55,7 +59,7 @@
       <div class="edit_content_all">
         <div class="edit_l">
           <ul class="edit_tab">
-            <li :class="{active:data.currentTab === item.value}" v-for="item in data.tabList" @click="clickTabFn(item)">
+            <li :class="{active:data.currentTab === item.value}" v-for="item in data.tabList" @click="clickTabFn(item.value)">
               <el-popover
                 placement="left"
                 :width="100"
@@ -72,7 +76,7 @@
             </li>
           </ul>
           <div class="edit_b">
-            <pageForm :formConfig="data.currentTab==2?jobConfig:basicConfig" @handleSubmit="handleSubmit"></pageForm>
+            <pageForm :bakFormData="data.formData" :formConfig="data.currentTab==2?jobConfig:basicConfig" @handleSubmit="handleSubmit"></pageForm>
           </div>
         </div>
       </div>

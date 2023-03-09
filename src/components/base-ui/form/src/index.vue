@@ -7,7 +7,7 @@
       <template v-for="item in props.formItems" :key="item.label">
         <el-form-item :label="item.label" :prop="item.field" :rules="item.rules">
           <component
-            v-if="item.type !== 'upload'"
+            v-if="item.type !== 'upload'&&item.type !== 'editor'"
             :is="`el-${item.type}`"
             :placeholder="item.placeholder"
             v-bind="item.attrs"
@@ -24,13 +24,16 @@
             </template>
           </component>
           <el-upload
-            v-else
+            v-else-if="item.type == 'upload'"
               v-bind="{...item.attrs,...item.uploadAttrs}"
               :on-success="(res,file)=>uploadSuccess(res,file,item.field)">
               <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <slot name="uploadArea"></slot>
+              <slot name="uploadArea" v-else-if="!imageUrl"></slot>
               <slot name="uploadTip"></slot>
           </el-upload>
+          <div v-else>
+            
+          </div>
         </el-form-item>
       </template>
     </el-form>
@@ -43,7 +46,7 @@
 <script setup lang="ts">
 import type { IFormItem } from '../types';
 import { defineProps, defineEmits, ref, watch } from 'vue';
-import type { FormInstance,UploadProps } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 
 const emits = defineEmits(['update:modelValue']);
 const formRef = ref<FormInstance>()
@@ -67,12 +70,15 @@ const formData = ref({ ...props.modelValue });
 // const formData = computed(() => ({ ...props.modelValue }));
 // 重置还有问题:产生递归
 // 监听更新值更新到pageSearch页面
-// watch(
-//   () => props.modelValue,
-//   (newValue) => {
-//     formData.value = newValue;
-//   }
-// );
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    formData.value = newValue;
+    if(newValue.avatar){
+      imageUrl.value = newValue.avatar
+    }
+  }
+);
 
 const imageUrl = ref('')
 

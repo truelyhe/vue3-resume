@@ -23,6 +23,7 @@ export const resumeInfoStore = defineStore('baseInfo', {
       await getAllData({id:myId}).then((res:any)=>{
         this.resumeInfo.allInfo = res.data
         this.resumeInfo.baseInfo = res.data
+        this.resumeInfo.jobInfo = res.data[0].jobInfo
       })
     },
     async getBaseInfo() {
